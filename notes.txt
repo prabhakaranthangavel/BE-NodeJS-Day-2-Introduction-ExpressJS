@@ -1,0 +1,553 @@
+Contents:
+
+1.What is ExpressJS & Installation
+
+2.Nodemon Installation
+
+3.API methods - GET, POST, PUT, DELETE
+
+4.Example in A simple web Application using ExpressJS and display the output
+
+*************************************************************************************************************************
+
+1.What is ExpressJS
+
+===>ExpressJS is a Web Application Framework for NodeJS.
+    ExpressJS என்பது NodeJS க்கான Web Application Framework ஆகும்.
+
+===>It's difficult when using only NodeJS entirely.
+    This is easy when using the ExpressJS library.
+    முழுக்க முழுக்க NodeJS ஐ மட்டும் பயன்படுத்தும் போது கடினமாக இருக்கும்.
+    இதுவே ExpressJS என்ற library ஐ பயன்படுத்தும் போது எளிதாக இருக்கும்.
+
+===>ExpressJS ன் மூலம் API requests, HTML handling, Define the route, Manage the middleware போன்றவற்றை செய்வது எளிமையாக்கும்.
+
+===>ExpressJS ஐ install செய்ய
+    npm install express
+    
+    பிறகு நிறைய changes உள்ளதால் அதனை ignore செய்து gitல் push செய்ய 
+    create the .gitignore file
+
+    .gitignore => node_modules/
+                  package-lock.json என்ற command களை கொடுக்க வேண்டும்.
+
+
+===>ExpressJS ஆக covert செய்ய
+
+    const http = require('http'); என்பதற்கு பதிலாக 
+
+    const express = require('express'); என்று கொடுக்க வேண்டும்.
+
+
+===>ExpressJS ன் Application ஐ create செய்ய
+    const app = express(); என்று கொடுக்க வேண்டும்.
+
+
+    const express = require('express');
+    const app = express();               என்று இருக்க வேண்டும்.
+
+
+    app.get என்பது get requestக்கான function ஆகும்.
+
+*************************************************************************************************************************
+
+2.Nodemon Installation
+
+===>You have to give "npm start" every time in Terminal to run.
+    So "nodemon" is used to avoid this.
+    Run செய்வதற்காக Terminal ல் ஒவ்வொரு முறையும் "npm start" என்று கொடுக்க வேண்டிய உள்ளது.
+    ஆகவே இதனை தவிர்ப்பதற்காக "nodemon" பயன்படுகிறது.
+
+===>nodemon ஐ install செய்ய
+    npm install --save-dev nodemon
+
+    Dev dependencies ல் store ஆகும்.
+
+    பிறகு package.json ல் scripts என்ற இடத்தில் ,"dev" : "nodemon server.js" என்ற command ஐ கொடுக்கவும்.
+
+    இப்போது நாம் Run செய்வதற்கு npm run dev என்று கொடுத்தால் மட்டும் போதுமானது.
+
+*************************************************************************************************************************
+
+3.API methods - GET, POST, PUT, DELETE
+
+===>Endpoint Methods:
+
+    URL                 Request Type       Functionality
+    /api/notes          GET                fetches all the notes
+    /api/notes/10       GET                fetches a single note
+    /api/notes          POST               creates a new note based on the request data
+    /api/notes/10       DELETE             deletes a note identified by id
+    /api/notes/10       PUT                replaces the entire note identified by id with the request data
+    /api/notes/10       PATCH              replaces a part of the note identified by id with the request data
+
+                ************************************************************
+
+
+Endpoints GET => fetches a single note methods: 
+
+===>This method is used to display only the content with the specified id.
+    நமக்கு குறிப்பிட்ட id ல் உள்ள content ஐ மட்டும் display செய்வதற்கு இந்த method பயன்படுகிறது.
+
+===>Example
+
+    // endpoint to fetch a single note
+    app.get('/api/notes/:id', (request, response) => {
+
+    // get the id from the params
+    const id = request.params.id;
+
+    // find the note with the id in notes data
+    const note = notes.find(note => note.id == id);
+
+    if (note) {
+        // if such an object with the id exists
+        response.status(200).json(note);
+    } else {
+        response.status(404).json({ message: 'id does not exists' });
+    }
+    });
+
+
+o/p:
+
+Endpoints GET => fetches a single note methods:
+http://127.0.0.1:4000/api/notes/1  
+என்று கொடுக்கும் பொழுது id:1 அதனுடைய content மட்டும் நமக்கு display ஆக வேண்டும்.
+ஒருவேளை id number ஆனது match ஆகாவிட்டாலும் அல்லது தவறாக கொடுக்கப்பட்டு விட்டாலும் id does not exists என்று வரவேண்டும்.
+Run ஆகிறது.
+
+                ************************************************************
+
+
+Endpoints POST => creates a new note based on the request data methods:
+
+===>This method is used to add a new content.
+    புதிதாக ஒரு content ஐ add செய்ய இந்த method பயன்படுகிறது.
+
+===>Example
+
+// middleware
+    app.use(express.json());
+
+
+// endpoint to create a new note based on the request data
+app.post('/api/notes', (request, response) => {
+    //console.log(request.body);
+    notes = notes.concat(request.body);
+    response.status(201).json({ message: 'note created successfully' });
+});
+
+
+
+const notes = என்ற variable ல் நாம் புதிதாக ஒரு தகவலை add(POST) செய்கிறோம்.
+ 
+ஒருவேளை நாம் add செய்து console.log(request.body); செய்யும் போது நமக்கு display ஆகவில்லை என்பதனால் "middleware" என்ற function ஐ பயன்படுத்துகிறோம்.
+
+middleware என்பது Request and Response என்ற இரண்டையும் handle செய்வதற்காக பயன்படுத்தக்கூடிய ஒரு function ஆகும்.
+
+மேலும் அதனுள் நாம் JSON என்று கொடுப்பதனால் வரக்கூடிய Response ஆனது எவ்வாறு இருந்தாலும் 
+அதனை JSON format ஆக நமக்கு மாற்றித் தரும்.
+ஆகவே இவ்வாறு நாம் பயன்படுத்துகிறோம்.
+
+அதே போல் store ஆகக்கூடிய புதிய content ஆனது தற்காலிகமானது.
+
+
+o/p:
+
+
+Endpoints POST => creates a new note based on the request data methods:
+
+    {
+        id : 4,
+        content : 'NodeJS vs ExpressJS',
+        important : false
+    },
+
+இப்போது http://127.0.0.1:4000/api/notes/  என்று கொடுக்கும்போது
+நாம் add செய்த notes என்ற variableல் புதிதாக சேர்த்த id:4 ன் உடைய ஒரு content ஆனது வரவேண்டும்.
+Run ஆகிறது.
+
+                ************************************************************
+
+
+Endpoints DELETE => deletes a note identified by id methods:
+
+===>This method is used to delete only the content with the specified id.
+    நமக்கு குறிப்பிட்ட id ல் உள்ள content ஐ மட்டும் delete செய்வதற்கு இந்த method பயன்படுகிறது.
+
+===>ஒரு content ஐ delete செய்ய இந்த method பயன்படுகிறது.
+
+===>Example
+
+// endpoint to delete a note identified by id
+app.delete('/api/notes/:id', (request, response) => {
+    // get the id from the params
+    const id = request.params.id;
+
+    // find the note matching the id
+    const note = notes.find(note => note.id == id);
+
+    notes = notes.filter(note => note.id != id);
+
+    if (note) {
+        response.status(204).json(note);
+    } else {
+        response.status(404).json({ message: 'id does not exists' });
+    }
+});
+
+
+
+o/p:
+
+Endpoints DELETE => deletes a note identified by id methods:
+
+    {
+        id : 4,
+        content : 'NodeJS vs ExpressJS',
+        important : false
+    },
+
+http://127.0.0.1:4000/api/notes/4 என்று கொடுக்கும்போது
+id:4 ன் உடைய content மட்டும் நமக்கு delete ஆக வேண்டும்.
+Run ஆகிறது.
+
+                ************************************************************
+
+Endpoints PUT => replaces the entire note identified by id with the request data methods:
+
+===>This method is used to replace or edit only the content with the specified id.
+    நமக்கு குறிப்பிட்ட id ல் உள்ள content ஐ மட்டும் replace or edit செய்வதற்கு இந்த method பயன்படுகிறது.
+
+===>Example
+
+    // endpoint to replace the entire note identified by id with the request data
+    app.put('/api/notes/:id', (request, response) => {
+
+    // get the id from the params
+    const id = request.params.id;
+
+    // get the note to replace from the user - request body
+    const noteToReplace = request.body;
+
+    // find the object matching the id
+    const note = notes.find(note => note.id == id);
+
+    notes = notes.map(note => note.id == id ? noteToReplace : note);
+
+    if (note) {
+        response.status(200).json({ message: 'note replaced' });
+    } else {
+        response.status(404).json({ message: 'id does not exists' });
+    }
+    });
+
+o/p:
+
+Endpoints PUT => replaces the entire note identified by id with the request data methods:
+
+http://127.0.0.1:4000/api/notes/1 
+குறிப்பிட்ட id number மட்டும் கொடுக்கும் பொழுது replace செய்த content ஐ நமக்கு display செய்ய வேண்டும்.
+
+    {
+        id : 1,
+        content : 'JavaScript is a Functionality and Activity',
+        important : true
+    },
+
+இதிலுள்ள content : 'JavaScript is a Functionality and Activity',
+           important : true 
+ஆக உள்ளதை false ஆக மாற்றி தருகிறோம்.
+
+Run ஆகிறது.
+
+                ************************************************************
+
+
+Endpoints PATCH => replaces a part of the note identified by id with the request data methods:
+
+===>This method is used to replace or edit only the content with the specified id.
+    ஒரு idல் உள்ள மொத்த content ஐ மாற்றாமல் அதிலுள்ள ஏதேனும் ஒரே ஒரு document ஐ மட்டும் மாற்றுவதற்கு இந்த method பயன்படுகிறது.
+
+===>Example
+
+    // endpoint to patch a part of note identified by id with the request data
+    app.patch('/api/notes/:id', (request, response) => {
+    // get the id from the params
+    const id = request.params.id;
+
+    // get the note to replace from the user - request body
+    const noteToReplace = request.body;
+
+    // find the object matching the id
+    const note = notes.find(note => note.id == id);
+
+    notes = notes.map(note => note.id == id ? {...note, ...noteToReplace} : note);
+
+    if (note) {
+        response.status(200).json({ message: 'note patched' });
+    } else {
+        response.status(404).json({ message: 'id does not exists' });
+    }
+    });
+
+
+o/p:
+
+Endpoints PATCH => replaces a part of the note identified by id with the request data methods:
+
+http://127.0.0.1:4000/api/notes/1 
+குறிப்பிட்ட id number மட்டும் கொடுக்கும் பொழுது replace செய்த content ஐ நமக்கு display செய்ய வேண்டும்.
+
+    {
+        id : 1,
+        content : 'JavaScript is a Functionality',
+        important : true
+    },
+
+இதிலுள்ள important : true ஆக உள்ளதை false ஆக மாற்றி தருகிறோம்.
+Run ஆகிறது.
+
+*************************************************************************************************************************
+
+4.Example : A simple web Application using ExpressJS and display the output
+
+// npm install express
+
+//.gitignore => node_modules/
+                package-lock.json
+
+
+// Convert the ExpressJS
+const express = require('express');
+
+// Create the ExpressJS Application
+const app = express();
+
+// middleware
+app.use(express.json());
+
+
+
+const notes = [
+
+    {
+        id : 1,
+        content : 'JavaScript is a Functionality',
+        important : true
+    },
+
+    {
+        id : 2,
+        content : 'CSS is a Styling',
+        important : false
+    },
+
+    {
+        id : 3,
+        content : 'React is a both (1) and (2)',
+        important : true
+    },
+
+]
+
+
+
+// Define the application hostname & port number
+const HOSTNAME = '127.0.0.1';  // local host IP Address
+const PORT     = 4000;         // user defined
+
+
+
+// set the end ponits
+// set the / route
+app.get('/', (request,response) => {
+    response.send('Hello World');
+})
+
+
+
+// endpoint to view all the notes
+app.get('/api/notes', (request, response) => {
+    response.json(notes);
+});
+
+
+
+// endpoint to fetch a single note
+app.get('/api/notes/:id', (request, response) => {
+    // get the id from the params
+    const id = request.params.id;
+
+    // find the note with the id in notes data
+    const note = notes.find(note => note.id == id);
+
+    if (note) {
+        // if such an object with the id exists
+        response.status(200).json(note);
+    } else {
+        response.status(404).json({ message: 'id does not exists' });
+    }
+});
+
+
+
+// endpoint to create a new note based on the request data
+app.post('/api/notes', (request, response) => {
+    notes = notes.concat(request.body);
+    response.status(201).json({ message: 'note created successfully' });
+});
+
+
+
+// endpoint to delete a note identified by id
+app.delete('/api/notes/:id', (request, response) => {
+    // get the id from the params
+    const id = request.params.id;
+
+    // find the note matching the id
+    const note = notes.find(note => note.id == id);
+
+    notes = notes.filter(note => note.id != id);
+
+    if (note) {
+        response.status(204).json(note);
+    } else {
+        response.status(404).json({ message: 'id does not exists' });
+    }
+});
+
+
+
+// endpoint to replace the entire note identified by id with the request data
+app.put('/api/notes/:id', (request, response) => {
+    // get the id from the params
+    const id = request.params.id;
+
+    // get the note to replace from the user - request body
+    const noteToReplace = request.body;
+
+    // find the object matching the id
+    const note = notes.find(note => note.id == id);
+
+    notes = notes.map(note => note.id == id ? noteToReplace : note);
+
+    if (note) {
+        response.status(200).json({ message: 'note replaced' });
+    } else {
+        response.status(404).json({ message: 'id does not exists' });
+    }
+});
+
+
+
+// endpoint to patch a part of note identified by id with the request data
+app.patch('/api/notes/:id', (request, response) => {
+    // get the id from the params
+    const id = request.params.id;
+
+    // get the note to replace from the user - request body
+    const noteToReplace = request.body;
+
+    // find the object matching the id
+    const note = notes.find(note => note.id == id);
+
+    notes = notes.map(note => note.id == id ? {...note, ...noteToReplace} : note);
+
+    if (note) {
+        response.status(200).json({ message: 'note patched' });
+    } else {
+        response.status(404).json({ message: 'id does not exists' });
+    }
+});
+
+
+
+// Make the server to listen to the different port number
+app.listen(PORT, () => {
+    console.log(`Application Running at http://${HOSTNAME}:${PORT}`);
+});
+
+
+
+
+o/p:
+
+set the end ponits:
+http://127.0.0.1:4000 ஐ Run செய்யும்போது Hello World! என்ற content ஆனது display ஆக வேண்டும்.
+Run ஆகிறது.
+
+
+
+endpoint to view all the notes:
+இதனுடன் http://127.0.0.1:4000/api/notes (api/notes)என்று கொடுக்கும்போது 
+notes என்ற variable ல் கொடுத்துள்ள மொத்த content ம் display ஆகும்.
+Run ஆகிறது.
+
+
+
+Endpoints GET => fetches a single note methods:
+http://127.0.0.1:4000/api/notes/1  
+என்று கொடுக்கும் பொழுது id:1 அதனுடைய content மட்டும் நமக்கு display ஆக வேண்டும்.
+ஒருவேளை id number ஆனது match ஆகாவிட்டாலும் அல்லது தவறாக கொடுக்கப்பட்டு விட்டாலும் id does not exists என்று வரவேண்டும்.
+Run ஆகிறது.
+
+
+
+Endpoints POST => creates a new note based on the request data methods:
+
+    {
+        id : 4,
+        content : 'NodeJS vs ExpressJS',
+        important : false
+    },
+இப்போது http://127.0.0.1:4000/api/notes/  என்று கொடுக்கும்போது
+நாம் add செய்த notes என்ற variableல் புதிதாக சேர்த்த id:4 ன் உடைய ஒரு content ஆனது வரவேண்டும்.
+Run ஆகிறது.
+
+
+
+Endpoints DELETE => deletes a note identified by id methods:
+    {
+        id : 4,
+        content : 'NodeJS vs ExpressJS',
+        important : false
+    },
+http://127.0.0.1:4000/api/notes/4 என்று கொடுக்கும்போது
+id:4 ன் உடைய content மட்டும் நமக்கு delete ஆக வேண்டும்.
+Run ஆகிறது.
+
+
+
+Endpoints PUT => replaces the entire note identified by id with the request data methods:
+
+http://127.0.0.1:4000/api/notes/1 
+குறிப்பிட்ட id number மட்டும் கொடுக்கும் பொழுது replace செய்த content ஐ நமக்கு display செய்ய வேண்டும்.
+
+    {
+        id : 1,
+        content : 'JavaScript is a Functionality and Activity',
+        important : true
+    },
+
+இதிலுள்ள content : 'JavaScript is a Functionality and Activity',
+           important : true 
+ஆக உள்ளதை false ஆக மாற்றி தருகிறோம்.
+Run ஆகிறது.
+
+
+
+Endpoints PATCH => replaces a part of the note identified by id with the request data methods:
+http://127.0.0.1:4000/api/notes/1 
+குறிப்பிட்ட id number மட்டும் கொடுக்கும் பொழுது replace செய்த content ஐ நமக்கு display செய்ய வேண்டும்.
+
+    {
+        id : 1,
+        content : 'JavaScript is a Functionality',
+        important : true
+    },
+இதிலுள்ள important : true ஆக உள்ளதை false ஆக மாற்றி தருகிறோம்.
+Run ஆகிறது.
+
+*************************************************************************************************************************
