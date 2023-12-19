@@ -74,6 +74,7 @@ app.get('/api/notes/:id', (request, response) => {
 
 // endpoint to create a new note based on the request data
 app.post('/api/notes', (request, response) => {
+    // console.log(request.body);    //undefined
     notes = notes.concat(request.body);
     response.status(201).json({ message: 'note created successfully' });
 });

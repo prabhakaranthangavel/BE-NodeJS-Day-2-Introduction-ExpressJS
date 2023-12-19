@@ -498,10 +498,10 @@ Run ஆகிறது.
 Endpoints POST => creates a new note based on the request data methods:
 
     {
-        id : 4,
-        content : 'NodeJS vs ExpressJS',
-        important : false
-    },
+        "id" : 4,
+        "content" : "ExpressJS",
+        "important" : false
+    }
 இப்போது http://127.0.0.1:4000/api/notes/  என்று கொடுக்கும்போது
 நாம் add செய்த notes என்ற variableல் புதிதாக சேர்த்த id:4 ன் உடைய ஒரு content ஆனது வரவேண்டும்.
 Run ஆகிறது.
